@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Ejemplo de Circuito</title>
     <style>
         body {
@@ -34,12 +34,10 @@
     </style>
 </head>
 <body>
-
     <div id="contenido">
         <h1>Exemple de circuit</h1>
         <p>Esquema del circuit generat amb Circuitikz.</p>
         <img src="ejemplo.svg" alt="Circuito Electrónico" />
-
         <h1>Muntatge pràctic</h1>
         <p>Cal que realitzeu el següent muntatge</p>
         <img src="ejemplo2.svg" alt="Circuito Electrónico" />
@@ -52,18 +50,32 @@
     <script>
         document.getElementById("downloadBtn").addEventListener("click", () => {
             const element = document.getElementById("contenido");
-            html2pdf()
-                .from(element)
-                .set({
-                    margin: 1,
-                    filename: 'circuito.pdf',
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2 },
-                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-                })
-                .save();
+
+            const images = element.querySelectorAll('img');
+            const promises = [];
+
+            images.forEach(img => {
+                if (!img.complete) {
+                    promises.push(new Promise(resolve => {
+                        img.onload = img.onerror = resolve;
+                    }));
+                }
+            });
+
+            Promise.all(promises).then(() => {
+                html2pdf()
+                    .from(element)
+                    .set({
+                        margin: 1,
+                        filename: 'circuito.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true },
+                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    })
+                    .save();
+            });
         });
     </script>
-
 </body>
 </html>
+
