@@ -17,18 +17,53 @@
             background-color: white;
             padding: 1em;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 2em;
+        }
+        #downloadBtn {
+            margin: 2em auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: block;
+            width: 200px;
         }
     </style>
 </head>
 <body>
-    <h1>Exemple de circuit</h1>
-    <p>Esquema del circuit generat amb Circuitikz.</p>
-    <img src="ejemplo.svg" alt="Circuito Electrónico" style="max-width: 90%; height: auto;" />
-</body>
 
-    <body>
-    <h1>Muntatge pràctic</h1>
-    <p>Cal que realitzeu el següent muntatge </p>
-    <img src="ejemplo2.svg" alt="Circuito Electrónico" style="max-width: 90%; height: auto;" />
+    <div id="contenido">
+        <h1>Exemple de circuit</h1>
+        <p>Esquema del circuit generat amb Circuitikz.</p>
+        <img src="ejemplo.svg" alt="Circuito Electrónico" />
+
+        <h1>Muntatge pràctic</h1>
+        <p>Cal que realitzeu el següent muntatge</p>
+        <img src="ejemplo2.svg" alt="Circuito Electrónico" />
+    </div>
+
+    <button id="downloadBtn">Descarregar com PDF</button>
+
+    <!-- html2pdf.js desde CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        document.getElementById("downloadBtn").addEventListener("click", () => {
+            const element = document.getElementById("contenido");
+            html2pdf()
+                .from(element)
+                .set({
+                    margin: 1,
+                    filename: 'circuito.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                })
+                .save();
+        });
+    </script>
+
 </body>
 </html>
